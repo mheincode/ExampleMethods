@@ -1,0 +1,100 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace SandBoxTesting
+{
+    public static class AboveOrBelow
+    {
+        public static Dictionary<string, int> CountAboveOrBelow(List<int> list, int comparisonValue)
+        {
+            int aboveCount = 0;
+            int belowCount = 0;
+
+            foreach (int num in list)
+            {
+                if (num > comparisonValue)
+                {
+                    aboveCount++;
+                }
+                else if (num < comparisonValue)
+                {
+                    belowCount++;
+                }
+            }
+
+            Dictionary<string, int> result = new Dictionary<string, int>
+                {
+                    {"above", aboveCount},
+                    {"below", belowCount}
+                };
+
+            return result;
+        }
+
+        public static Dictionary<string, int> CountAboveOrBelow2(List<int> integers, int comparisonValue)
+        {
+            // Initialize the dictionary with "above" and "below" keys
+            Dictionary<string, int> result = new Dictionary<string, int>
+            {
+                { "above", 0 },
+                { "below", 0 }
+            };
+
+            // Iterate over the integers and update the counts
+            foreach (int integer in integers)
+            {
+                if (integer > comparisonValue)
+                {
+                    result["above"]++;
+                }
+                else if (integer < comparisonValue)
+                {
+                    result["below"]++;
+                }
+            }
+
+            return result;
+        }
+
+        public static Dictionary<string, int> CountAboveOrBelow3(List<int> list, int comparisonValue)
+        {
+            AboveBelowComparer comparer = new AboveBelowComparer(comparisonValue);
+            int aboveCount = list.Count(num => comparer.Compare(num, comparisonValue) > 0);
+            int belowCount = list.Count(num => comparer.Compare(num, comparisonValue) < 0);
+
+            Dictionary<string, int> result = new Dictionary<string, int>
+            {
+                {"above", aboveCount},
+                {"below", belowCount}
+            };
+
+            return result;
+        }
+
+        public class AboveBelowComparer : IComparer<int>
+        {
+            private readonly int comparisonValue;
+
+            public AboveBelowComparer(int comparisonValue)
+            {
+                this.comparisonValue = comparisonValue;
+            }
+
+            public int Compare(int x, int y)
+            {
+                if (x > comparisonValue && y > comparisonValue)
+                {
+                    return x.CompareTo(y);
+                }
+                else if (x < comparisonValue && y < comparisonValue)
+                {
+                    return x.CompareTo(y);
+                }
+                else
+                {
+                    return x > y ? 1 : -1;
+                }
+            }
+        }
+    }
+}
